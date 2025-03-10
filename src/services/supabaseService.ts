@@ -3,16 +3,16 @@ import { supabase } from "@/integrations/supabase/client";
 
 // Interface para os dados do formulário
 export interface IntentData {
-  name: string;
-  whatsapp: string;
-  state: string;
+  Nome: string;
+  whatsapp: number; // Changed to number to match the database type
+  Estado: string;
 }
 
 // Função para salvar dados no Supabase
 export async function saveIntent(data: IntentData): Promise<void> {
   try {
     const { error } = await supabase
-      .from('cadastro_mawwal')
+      .from('cadastro ma') // Using the correct table name from Supabase
       .insert([data]);
     
     if (error) {

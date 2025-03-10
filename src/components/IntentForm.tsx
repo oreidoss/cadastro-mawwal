@@ -1,4 +1,3 @@
-
 import { useState, FormEvent } from "react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -94,7 +93,12 @@ const IntentForm = ({ onSuccess, onError, isSubmitting, setIsSubmitting }: Inten
     setIsSubmitting(true);
     
     try {
-      await saveIntent({ name, whatsapp, state });
+      // Convert form data to match the database structure
+      await saveIntent({
+        Nome: name,
+        whatsapp: Number(whatsapp), // Convert string to number to match the database type
+        Estado: state
+      });
       
       // Limpar o formulário
       setName("");
@@ -104,6 +108,8 @@ const IntentForm = ({ onSuccess, onError, isSubmitting, setIsSubmitting }: Inten
       onSuccess();
     } catch (error) {
       onError(error as Error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
