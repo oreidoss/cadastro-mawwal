@@ -110,51 +110,51 @@ const IntentForm = ({ onSuccess, onError, isSubmitting, setIsSubmitting }: Inten
   return (
     <form onSubmit={handleSubmit} className="space-y-6 animate-slide-up">
       <div className="space-y-2">
-        <Label htmlFor="name">Nome completo</Label>
+        <Label htmlFor="name" className="text-amber-100">Nome completo</Label>
         <Input
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Digite seu nome completo"
-          className={errors.name ? "border-red-500" : ""}
+          className={`bg-white/10 border-amber-300/30 text-white placeholder:text-amber-100/50 ${errors.name ? "border-red-500" : ""}`}
         />
-        {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
+        {errors.name && <p className="text-sm text-red-300">{errors.name}</p>}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="whatsapp">WhatsApp</Label>
+        <Label htmlFor="whatsapp" className="text-amber-100">WhatsApp</Label>
         <Input
           id="whatsapp"
           type="tel"
           value={whatsapp}
           onChange={handleWhatsAppChange}
           placeholder="DDD + número (apenas números)"
-          className={errors.whatsapp ? "border-red-500" : ""}
+          className={`bg-white/10 border-amber-300/30 text-white placeholder:text-amber-100/50 ${errors.whatsapp ? "border-red-500" : ""}`}
           maxLength={11}
         />
-        {errors.whatsapp && <p className="text-sm text-red-500">{errors.whatsapp}</p>}
+        {errors.whatsapp && <p className="text-sm text-red-300">{errors.whatsapp}</p>}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="state">Estado</Label>
+        <Label htmlFor="state" className="text-amber-100">Estado</Label>
         <Select value={state} onValueChange={setState}>
-          <SelectTrigger className={errors.state ? "border-red-500" : ""}>
+          <SelectTrigger className={`bg-white/10 border-amber-300/30 text-white ${errors.state ? "border-red-500" : ""}`}>
             <SelectValue placeholder="Selecione seu estado" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-emerald-900 border-amber-300/30 text-amber-100">
             {BRAZILIAN_STATES.map((state) => (
-              <SelectItem key={state.value} value={state.value}>
+              <SelectItem key={state.value} value={state.value} className="focus:bg-amber-300/20 focus:text-white">
                 {state.label}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        {errors.state && <p className="text-sm text-red-500">{errors.state}</p>}
+        {errors.state && <p className="text-sm text-red-300">{errors.state}</p>}
       </div>
 
       <Button 
         type="submit" 
-        className="w-full py-6 intent-button" 
+        className="w-full py-6 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-emerald-900 font-medium transition-all duration-300" 
         disabled={isSubmitting}
       >
         {isSubmitting ? (
