@@ -13,7 +13,6 @@ export type Database = {
         Row: {
           created_at: string
           Estado: string | null
-          "formato de venda": string | null
           FormatoVenda: string | null
           id: number
           Nome: string | null
@@ -22,7 +21,6 @@ export type Database = {
         Insert: {
           created_at?: string
           Estado?: string | null
-          "formato de venda"?: string | null
           FormatoVenda?: string | null
           id?: number
           Nome?: string | null
@@ -31,7 +29,6 @@ export type Database = {
         Update: {
           created_at?: string
           Estado?: string | null
-          "formato de venda"?: string | null
           FormatoVenda?: string | null
           id?: number
           Nome?: string | null
