@@ -70,7 +70,7 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="py-4 px-6 text-center text-sm text-amber-200/70">
-        <p>© {new Date().getFullYear()} Mawwal Arabia. Todos os direitos reservados.</p>
+        <p>© {new Date().getFullYear()} Marcia Carvalheira. Todos os direitos reservados.</p>
       </footer>
     </div>
   );
