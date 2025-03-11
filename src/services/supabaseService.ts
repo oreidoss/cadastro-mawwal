@@ -28,7 +28,7 @@ export async function saveIntent(data: IntentData): Promise<void> {
 // Função para fazer download do PDF após o cadastro
 export function downloadPDF() {
   // URL do Google Drive para download
-  const fileUrl = "https://drive.google.com/file/d/1lEn7_JQmJJDuwKJ9oLd351RTvMC8uulp/view?usp=drive_link";
+  const fileUrl = "https://drive.google.com/file/d/1lEn7_JQmJJDuwKJ9oLd351RTvMC8uulp/view?usp=sharing";
   
   // Abre o link em uma nova aba
   window.open(fileUrl, '_blank');

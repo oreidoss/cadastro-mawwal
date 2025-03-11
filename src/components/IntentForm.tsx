@@ -160,9 +160,10 @@ const IntentForm = ({ onSuccess, onError, isSubmitting, setIsSubmitting }: Inten
             <SelectValue placeholder="Selecione seu estado" />
           </SelectTrigger>
           <SelectContent 
-            className="z-50 max-h-[300px] overflow-y-auto bg-emerald-900 border border-amber-300/30 text-amber-100"
+            className="bg-emerald-900 border border-amber-300/30 text-amber-100 max-h-[300px] overflow-y-auto z-50"
             position="popper"
             sideOffset={5}
+            align="start"
           >
             {BRAZILIAN_STATES.map((stateOption) => (
               <SelectItem 
