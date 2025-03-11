@@ -9,7 +9,7 @@ const Index = () => {
   const handleFormSuccess = () => {
     setIsSubmitting(false);
     toast.success("Cadastro realizado com sucesso!", {
-      description: "Agradecemos pelo seu interesse."
+      description: "O download do catálogo começará automaticamente."
     });
   };
 
@@ -41,7 +41,7 @@ const Index = () => {
             <h1 className="text-3xl md:text-4xl font-bold mb-3 text-amber-300">Cadastre seu <span className="gradient-text">interesse</span></h1>
             <p className="text-amber-100 mb-8">
               Preencha o formulário abaixo para se registrar em nossa lista de interesses.
-              Entraremos em contato com você em breve!
+              Entraremos em contato com você em breve e você receberá nosso catálogo completo!
             </p>
             
             <IntentForm 

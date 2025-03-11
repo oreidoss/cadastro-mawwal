@@ -1,10 +1,12 @@
+
 import { useState, FormEvent } from "react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { saveIntent } from "@/services/supabaseService";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { saveIntent, downloadPDF } from "@/services/supabaseService";
 import { Loader2 } from "lucide-react";
 
 // Lista de estados brasileiros
@@ -45,6 +47,7 @@ const intentSchema = z.object({
     message: "WhatsApp inválido. Use apenas números (DDD + número)" 
   }),
   state: z.string().min(2, { message: "Selecione um estado" }),
+  salesFormat: z.string({ required_error: "Selecione o formato de venda" }),
 });
 
 type IntentFormProps = {
@@ -58,11 +61,12 @@ const IntentForm = ({ onSuccess, onError, isSubmitting, setIsSubmitting }: Inten
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [state, setState] = useState("");
+  const [salesFormat, setSalesFormat] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const validateForm = () => {
     try {
-      intentSchema.parse({ name, whatsapp, state });
+      intentSchema.parse({ name, whatsapp, state, salesFormat });
       setErrors({});
       return true;
     } catch (error) {
@@ -97,13 +101,18 @@ const IntentForm = ({ onSuccess, onError, isSubmitting, setIsSubmitting }: Inten
       await saveIntent({
         Nome: name,
         whatsapp: Number(whatsapp), // Convert string to number to match the database type
-        Estado: state
+        Estado: state,
+        FormatoVenda: salesFormat
       });
+      
+      // Iniciar download do PDF após salvar com sucesso
+      downloadPDF();
       
       // Limpar o formulário
       setName("");
       setWhatsapp("");
       setState("");
+      setSalesFormat("");
       
       onSuccess();
     } catch (error) {
@@ -156,6 +165,25 @@ const IntentForm = ({ onSuccess, onError, isSubmitting, setIsSubmitting }: Inten
           </SelectContent>
         </Select>
         {errors.state && <p className="text-sm text-red-300">{errors.state}</p>}
+      </div>
+
+      <div className="space-y-2">
+        <Label className="text-amber-100 block mb-2">Formato de Venda</Label>
+        <RadioGroup 
+          value={salesFormat} 
+          onValueChange={setSalesFormat}
+          className={`space-y-2 ${errors.salesFormat ? "border-red-500 border rounded-md p-2" : ""}`}
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="Porta a Porta" id="porta-a-porta" className="border-amber-300/30" />
+            <Label htmlFor="porta-a-porta" className="text-amber-100">Porta a Porta</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="Loja" id="loja" className="border-amber-300/30" />
+            <Label htmlFor="loja" className="text-amber-100">Loja</Label>
+          </div>
+        </RadioGroup>
+        {errors.salesFormat && <p className="text-sm text-red-300">{errors.salesFormat}</p>}
       </div>
 
       <Button 
