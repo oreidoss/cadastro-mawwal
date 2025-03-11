@@ -153,15 +153,22 @@ const IntentForm = ({ onSuccess, onError, isSubmitting, setIsSubmitting }: Inten
       <div className="space-y-2">
         <Label htmlFor="state" className="text-amber-100">Estado</Label>
         <Select value={state} onValueChange={setState}>
-          <SelectTrigger id="state" className={`bg-white/10 border-amber-300/30 text-white ${errors.state ? "border-red-500" : ""}`}>
+          <SelectTrigger 
+            id="state" 
+            className={`bg-white/10 border-amber-300/30 text-white ${errors.state ? "border-red-500" : ""}`}
+          >
             <SelectValue placeholder="Selecione seu estado" />
           </SelectTrigger>
-          <SelectContent className="max-h-[300px] overflow-y-auto bg-emerald-900 border-amber-300/30 text-amber-100">
+          <SelectContent 
+            className="z-50 max-h-[300px] overflow-y-auto bg-emerald-900 border border-amber-300/30 text-amber-100"
+            position="popper"
+            sideOffset={5}
+          >
             {BRAZILIAN_STATES.map((stateOption) => (
               <SelectItem 
                 key={stateOption.value} 
-                value={stateOption.value} 
-                className="focus:bg-amber-300/20 focus:text-white"
+                value={stateOption.value}
+                className="focus:bg-amber-300/20 focus:text-white cursor-pointer"
               >
                 {stateOption.label}
               </SelectItem>
