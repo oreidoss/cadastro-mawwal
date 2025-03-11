@@ -6,7 +6,7 @@ export interface IntentData {
   Nome: string;
   whatsapp: number; // Changed to number to match the database type
   Estado: string;
-  FormatoVenda: string; // New field for sales format
+  FormatoVenda: string; // Using the exact column name from the database
 }
 
 // Função para salvar dados no Supabase
