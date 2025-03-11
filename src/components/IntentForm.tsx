@@ -1,12 +1,17 @@
-
 import { useState, FormEvent } from "react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { saveIntent, downloadPDF } from "@/services/supabaseService";
+import { saveIntent } from "@/services/supabaseService";
 import { Loader2 } from "lucide-react";
 
 // Lista de estados brasileiros
@@ -43,8 +48,8 @@ const BRAZILIAN_STATES = [
 // Schema de validação
 const intentSchema = z.object({
   name: z.string().min(3, { message: "Nome deve ter pelo menos 3 caracteres" }),
-  whatsapp: z.string().regex(/^\d{10,11}$/, { 
-    message: "WhatsApp inválido. Use apenas números (DDD + número)" 
+  whatsapp: z.string().regex(/^\d{10,11}$/, {
+    message: "WhatsApp inválido. Use apenas números (DDD + número)",
   }),
   state: z.string().min(2, { message: "Selecione um estado" }),
   salesFormat: z.string({ required_error: "Selecione o formato de venda" }),
@@ -57,7 +62,12 @@ type IntentFormProps = {
   setIsSubmitting: (value: boolean) => void;
 };
 
-const IntentForm = ({ onSuccess, onError, isSubmitting, setIsSubmitting }: IntentFormProps) => {
+const IntentForm = ({
+  onSuccess,
+  onError,
+  isSubmitting,
+  setIsSubmitting,
+}: IntentFormProps) => {
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [state, setState] = useState("");
@@ -91,29 +101,29 @@ const IntentForm = ({ onSuccess, onError, isSubmitting, setIsSubmitting }: Inten
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setIsSubmitting(true);
-    
+
     try {
       // Convert form data to match the database structure
       await saveIntent({
         Nome: name,
         whatsapp: Number(whatsapp), // Convert string to number to match the database type
         Estado: state,
-        FormatoVenda: salesFormat
+        FormatoVenda: salesFormat,
       });
-      
-      // Iniciar download do PDF após salvar com sucesso
-      downloadPDF();
-      
+
+      // Remove the automatic PDF download since we'll handle it on the success page
+      // downloadPDF();
+
       // Limpar o formulário
       setName("");
       setWhatsapp("");
       setState("");
       setSalesFormat("");
-      
+
       onSuccess();
     } catch (error) {
       onError(error as Error);
@@ -125,49 +135,63 @@ const IntentForm = ({ onSuccess, onError, isSubmitting, setIsSubmitting }: Inten
   return (
     <form onSubmit={handleSubmit} className="space-y-6 animate-slide-up">
       <div className="space-y-2">
-        <Label htmlFor="name" className="text-amber-100">Nome completo</Label>
+        <Label htmlFor="name" className="text-amber-100">
+          Nome completo
+        </Label>
         <Input
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Digite seu nome completo"
-          className={`bg-white/10 border-amber-300/30 text-white placeholder:text-amber-100/50 ${errors.name ? "border-red-500" : ""}`}
+          className={`bg-white/10 border-amber-300/30 text-white placeholder:text-amber-100/50 ${
+            errors.name ? "border-red-500" : ""
+          }`}
         />
         {errors.name && <p className="text-sm text-red-300">{errors.name}</p>}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="whatsapp" className="text-amber-100">WhatsApp</Label>
+        <Label htmlFor="whatsapp" className="text-amber-100">
+          WhatsApp
+        </Label>
         <Input
           id="whatsapp"
           type="tel"
           value={whatsapp}
           onChange={handleWhatsAppChange}
           placeholder="DDD + número (apenas números)"
-          className={`bg-white/10 border-amber-300/30 text-white placeholder:text-amber-100/50 ${errors.whatsapp ? "border-red-500" : ""}`}
+          className={`bg-white/10 border-amber-300/30 text-white placeholder:text-amber-100/50 ${
+            errors.whatsapp ? "border-red-500" : ""
+          }`}
           maxLength={11}
         />
-        {errors.whatsapp && <p className="text-sm text-red-300">{errors.whatsapp}</p>}
+        {errors.whatsapp && (
+          <p className="text-sm text-red-300">{errors.whatsapp}</p>
+        )}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="state" className="text-amber-100">Estado</Label>
+        <Label htmlFor="state" className="text-amber-100">
+          Estado
+        </Label>
         <Select value={state} onValueChange={setState}>
-          <SelectTrigger 
-            id="state" 
-            className={`bg-white/10 border-amber-300/30 text-white ${errors.state ? "border-red-500" : ""}`}
+          <SelectTrigger
+            id="state"
+            className={`bg-white/10 border-amber-300/30 text-white ${
+              errors.state ? "border-red-500" : ""
+            }`}
           >
             <SelectValue placeholder="Selecione seu estado" />
           </SelectTrigger>
-          <SelectContent 
+          <SelectContent
             className="bg-emerald-900 border border-amber-300/30 text-amber-100 max-h-[300px] overflow-y-auto z-50"
             position="popper"
             sideOffset={5}
             align="start"
           >
             {BRAZILIAN_STATES.map((stateOption) => (
-              <SelectItem 
-                key={stateOption.value} 
+              <SelectItem
+                key={stateOption.value}
                 value={stateOption.value}
                 className="focus:bg-amber-300/20 focus:text-white cursor-pointer"
               >
@@ -181,26 +205,42 @@ const IntentForm = ({ onSuccess, onError, isSubmitting, setIsSubmitting }: Inten
 
       <div className="space-y-2">
         <Label className="text-amber-100 block mb-2">Formato de Venda</Label>
-        <RadioGroup 
-          value={salesFormat} 
+        <RadioGroup
+          value={salesFormat}
           onValueChange={setSalesFormat}
-          className={`space-y-2 ${errors.salesFormat ? "border-red-500 border rounded-md p-2" : ""}`}
+          className={`space-y-2 ${
+            errors.salesFormat ? "border-red-500 border rounded-md p-2" : ""
+          }`}
         >
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="Porta a Porta" id="porta-a-porta" className="border-amber-300/30" />
-            <Label htmlFor="porta-a-porta" className="text-amber-100">Porta a Porta</Label>
+            <RadioGroupItem
+              value="Porta a Porta"
+              id="porta-a-porta"
+              className="border-amber-300/30"
+            />
+            <Label htmlFor="porta-a-porta" className="text-amber-100">
+              Porta a Porta
+            </Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="Loja" id="loja" className="border-amber-300/30" />
-            <Label htmlFor="loja" className="text-amber-100">Loja</Label>
+            <RadioGroupItem
+              value="Loja"
+              id="loja"
+              className="border-amber-300/30"
+            />
+            <Label htmlFor="loja" className="text-amber-100">
+              Loja
+            </Label>
           </div>
         </RadioGroup>
-        {errors.salesFormat && <p className="text-sm text-red-300">{errors.salesFormat}</p>}
+        {errors.salesFormat && (
+          <p className="text-sm text-red-300">{errors.salesFormat}</p>
+        )}
       </div>
 
-      <Button 
-        type="submit" 
-        className="w-full py-6 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-emerald-900 font-medium transition-all duration-300" 
+      <Button
+        type="submit"
+        className="w-full py-6 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-emerald-900 font-medium transition-all duration-300"
         disabled={isSubmitting}
       >
         {isSubmitting ? (

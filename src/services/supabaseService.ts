@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
 // Interface para os dados do formulário
@@ -13,14 +12,14 @@ export interface IntentData {
 export async function saveIntent(data: IntentData): Promise<void> {
   try {
     const { error } = await supabase
-      .from('cadastro ma') // Using the correct table name from Supabase
+      .from("cadastro ma") // Using the correct table name from Supabase
       .insert([data]);
-    
+
     if (error) {
-      throw new Error(error.message || 'Falha ao salvar intenção');
+      throw new Error(error.message || "Falha ao salvar intenção");
     }
   } catch (error) {
-    console.error('Erro ao salvar intenção:', error);
+    console.error("Erro ao salvar intenção:", error);
     throw error;
   }
 }
@@ -28,8 +27,9 @@ export async function saveIntent(data: IntentData): Promise<void> {
 // Função para fazer download do PDF após o cadastro
 export function downloadPDF() {
   // URL do Google Drive para download
-  const fileUrl = "https://drive.google.com/file/d/1lEn7_JQmJJDuwKJ9oLd351RTvMC8uulp/view?usp=sharing";
-  
+  const fileUrl =
+    "https://drive.google.com/file/d/1b4wchHg6jPC_KFqtt6XqXY-1dpNNVO5j/view?usp=sharing";
+
   // Abre o link em uma nova aba
-  window.open(fileUrl, '_blank');
+  window.open(fileUrl, "_blank");
 }
