@@ -27,14 +27,9 @@ export async function saveIntent(data: IntentData): Promise<void> {
 
 // Função para fazer download do PDF após o cadastro
 export function downloadPDF() {
-  // URL do PDF para download
-  const pdfUrl = '/catalogo.pdf'; // Substitua pelo caminho real do PDF
+  // URL do Google Drive para download
+  const fileUrl = "https://drive.google.com/file/d/1lEn7_JQmJJDuwKJ9oLd351RTvMC8uulp/view?usp=drive_link";
   
-  // Cria um elemento <a> para iniciar o download
-  const link = document.createElement('a');
-  link.href = pdfUrl;
-  link.download = 'catalogo-mawwal.pdf'; // Nome do arquivo que será baixado
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  // Abre o link em uma nova aba
+  window.open(fileUrl, '_blank');
 }
